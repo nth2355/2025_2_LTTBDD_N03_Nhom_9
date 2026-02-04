@@ -1,16 +1,37 @@
-# weather_app
+## Team Members
 
-A new Flutter project.
+- **Nguyễn Thanh Hải**
+- **Hoàng Đại Nghĩa**
 
-## Getting Started
+# Flutter Weather App
 
-This project is a starting point for a Flutter application.
+Mobile application project for **Lập trình thiết bị di động** course.
 
-A few resources to get you started if this is your first Flutter project:
+## Overview
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+A weather application built with Flutter that displays current weather and forecast information using a public weather API.
+The project focuses on **modern UI/UX design** and clean project structure.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tech Stack
+
+- Flutter
+- Dart
+- REST API (Weather API)
+- Git & GitHub
+
+## Features
+
+- View current weather by city
+- Weather forecast
+- English / Vietnamese language support
+- Modern and responsive UI
+- About team page
+
+## Project Structure
+
+The project is organized using a feature-based structure to ensure
+scalability and maintainability.
+
+## Notes
+
+This project is developed for academic purposes.
