@@ -17,7 +17,6 @@ class WeatherApiService {
     _apiKey = key;
   }
 
-  /// Search cities using OpenWeather Geocoding API
   Future<List<CitySearchResult>> searchCities(
     String query,
   ) async {
@@ -50,7 +49,6 @@ class WeatherApiService {
     }
   }
 
-  /// Get current weather by coordinates
   Future<Map<String, dynamic>> getCurrentWeather(
     double lat,
     double lon, {
@@ -78,7 +76,6 @@ class WeatherApiService {
     }
   }
 
-  /// Get 5-day/3-hour forecast by coordinates
   Future<Map<String, dynamic>> getForecast(
     double lat,
     double lon, {
@@ -105,13 +102,11 @@ class WeatherApiService {
     }
   }
 
-  /// Fetch complete weather data (current + forecast) and parse into Weather model
   Future<Weather> getWeather(
     double lat,
     double lon, {
     String lang = 'en',
   }) async {
-    // Fetch both endpoints concurrently
     final results = await Future.wait([
       getCurrentWeather(lat, lon, lang: lang),
       getForecast(lat, lon, lang: lang),
@@ -120,18 +115,15 @@ class WeatherApiService {
     final currentData = results[0];
     final forecastData = results[1];
 
-    // Parse current weather
     final location = WeatherLocation.fromJson(currentData);
     final current = CurrentWeather.fromJson(currentData);
 
-    // Parse hourly forecast (next 24 hours = 8 entries at 3-hour intervals)
     final List<dynamic> forecastList = forecastData['list'];
     final hourlyForecast = forecastList
         .take(8)
         .map((e) => HourlyForecast.fromJson(e))
         .toList();
 
-    // Parse daily forecast (group by day, take 7 days)
     final dailyForecast = _extractDailyForecasts(
       forecastList,
     );
@@ -144,7 +136,6 @@ class WeatherApiService {
     );
   }
 
-  /// Extract daily forecasts from 3-hourly data
   List<DailyForecast> _extractDailyForecasts(
     List<dynamic> forecastList,
   ) {
@@ -168,7 +159,6 @@ class WeatherApiService {
       double maxTemp = double.negativeInfinity;
       double totalPop = 0;
 
-      // Find the midday entry for icon/description (or first one)
       Map<String, dynamic> representativeItem = items.first;
       for (final item in items) {
         final main = item['main'] as Map<String, dynamic>;
@@ -210,7 +200,6 @@ class WeatherApiService {
       );
     }
 
-    // Skip today, return next 7 days
     if (dailies.length > 1) {
       return dailies.sublist(1).take(7).toList();
     }
