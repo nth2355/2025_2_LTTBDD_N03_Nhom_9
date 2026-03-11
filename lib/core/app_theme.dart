@@ -53,20 +53,26 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimaryLight,
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimaryLight),
+        iconTheme: const IconThemeData(
+          color: AppColors.textPrimaryLight,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.cardLight,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textSecondaryLight,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-      ),
+      bottomNavigationBarTheme:
+          BottomNavigationBarThemeData(
+            backgroundColor: Colors.white,
+            selectedItemColor: AppColors.primary,
+            unselectedItemColor:
+                AppColors.textSecondaryLight,
+            type: BottomNavigationBarType.fixed,
+            elevation: 0,
+          ),
     );
   }
 
@@ -95,20 +101,26 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimaryDark,
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
+        iconTheme: const IconThemeData(
+          color: AppColors.textPrimaryDark,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.cardDark,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: AppColors.primaryDark,
-        selectedItemColor: AppColors.accent,
-        unselectedItemColor: AppColors.textSecondaryDark,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-      ),
+      bottomNavigationBarTheme:
+          BottomNavigationBarThemeData(
+            backgroundColor: AppColors.primaryDark,
+            selectedItemColor: AppColors.accent,
+            unselectedItemColor:
+                AppColors.textSecondaryDark,
+            type: BottomNavigationBarType.fixed,
+            elevation: 0,
+          ),
     );
   }
 }

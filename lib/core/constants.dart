@@ -16,6 +16,8 @@ class ApiConstants {
       '$baseUrl/data/2.5/weather';
   static String get forecastUrl =>
       '$baseUrl/data/2.5/forecast';
+  static String get airPollutionUrl =>
+      '$baseUrl/data/2.5/air_pollution';
 
   // Cache
   static const int cacheDurationMinutes = 15;
