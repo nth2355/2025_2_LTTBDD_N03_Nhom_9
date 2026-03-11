@@ -17,6 +17,7 @@ class WeatherApiService {
     _apiKey = key;
   }
 
+  /// Search cities using OpenWeather Geocoding API
   Future<List<CitySearchResult>> searchCities(
     String query,
   ) async {
@@ -49,6 +50,7 @@ class WeatherApiService {
     }
   }
 
+  /// Get current weather by coordinates
   Future<Map<String, dynamic>> getCurrentWeather(
     double lat,
     double lon, {
@@ -76,6 +78,7 @@ class WeatherApiService {
     }
   }
 
+  /// Get 5-day/3-hour forecast by coordinates
   Future<Map<String, dynamic>> getForecast(
     double lat,
     double lon, {
@@ -102,28 +105,72 @@ class WeatherApiService {
     }
   }
 
+  /// Get air quality index (AQI) from Air Pollution API
+  /// Returns AQI value: 1=Good, 2=Fair, 3=Moderate, 4=Poor, 5=Very Poor
+  Future<int?> getAirQualityIndex(
+    double lat,
+    double lon,
+  ) async {
+    try {
+      final uri = Uri.parse(ApiConstants.airPollutionUrl)
+          .replace(
+            queryParameters: {
+              'lat': lat.toString(),
+              'lon': lon.toString(),
+              'appid': _apiKey,
+            },
+          );
+
+      final response = await _client.get(uri);
+
+      if (response.statusCode == 200) {
+        final data =
+            json.decode(response.body)
+                as Map<String, dynamic>;
+        final list = data['list'] as List?;
+        if (list != null && list.isNotEmpty) {
+          final main =
+              list.first['main'] as Map<String, dynamic>?;
+          return main?['aqi'] as int?;
+        }
+      }
+    } catch (_) {
+      // Silently fail — AQI is non-critical
+    }
+    return null;
+  }
+
+  /// Fetch complete weather data (current + forecast + AQI) and parse into Weather model
   Future<Weather> getWeather(
     double lat,
     double lon, {
     String lang = 'en',
   }) async {
+    // Fetch all 3 endpoints concurrently
     final results = await Future.wait([
       getCurrentWeather(lat, lon, lang: lang),
       getForecast(lat, lon, lang: lang),
+      getAirQualityIndex(lat, lon),
     ]);
 
-    final currentData = results[0];
-    final forecastData = results[1];
+    final currentData = results[0] as Map<String, dynamic>;
+    final forecastData = results[1] as Map<String, dynamic>;
+    final aqi = results[2] as int?;
 
+    // Parse current weather and attach AQI
     final location = WeatherLocation.fromJson(currentData);
-    final current = CurrentWeather.fromJson(currentData);
+    final current = CurrentWeather.fromJson(
+      currentData,
+    ).copyWith(aqi: aqi);
 
+    // Parse hourly forecast (next 24 hours = 8 entries at 3-hour intervals)
     final List<dynamic> forecastList = forecastData['list'];
     final hourlyForecast = forecastList
         .take(8)
         .map((e) => HourlyForecast.fromJson(e))
         .toList();
 
+    // Parse daily forecast (group by day, take 7 days)
     final dailyForecast = _extractDailyForecasts(
       forecastList,
     );
@@ -136,6 +183,7 @@ class WeatherApiService {
     );
   }
 
+  /// Extract daily forecasts from 3-hourly data
   List<DailyForecast> _extractDailyForecasts(
     List<dynamic> forecastList,
   ) {
@@ -159,6 +207,7 @@ class WeatherApiService {
       double maxTemp = double.negativeInfinity;
       double totalPop = 0;
 
+      // Find the midday entry for icon/description (or first one)
       Map<String, dynamic> representativeItem = items.first;
       for (final item in items) {
         final main = item['main'] as Map<String, dynamic>;
@@ -200,6 +249,7 @@ class WeatherApiService {
       );
     }
 
+    // Skip today, return next 7 days
     if (dailies.length > 1) {
       return dailies.sublist(1).take(7).toList();
     }
