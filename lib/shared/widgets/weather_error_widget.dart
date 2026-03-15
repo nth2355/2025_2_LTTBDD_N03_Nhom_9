@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+
+import '../../core/app_theme.dart';
+import '../../core/lang/app_localizations.dart';
+
+class WeatherErrorWidget extends StatelessWidget {
+  final String message;
+  final VoidCallback? onRetry;
+  final IconData icon;
+
+  const WeatherErrorWidget({
+    super.key,
+    required this.message,
+    this.onRetry,
+    this.icon = Icons.error_outline_rounded,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.accent.withValues(
+                  alpha: 0.1,
+                ),
+              ),
+              child: Icon(
+                icon,
+                size: 48,
+                color: AppColors.accent,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w500),
+            ),
+            if (onRetry != null) ...[
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh_rounded),
+                label: Text(l10n.tryAgain),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.accent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 14,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EmptySearchWidget extends StatelessWidget {
+  const EmptySearchWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return WeatherErrorWidget(
+      message: l10n.noSearchResults,
+      icon: Icons.search_off_rounded,
+    );
+  }
+}
