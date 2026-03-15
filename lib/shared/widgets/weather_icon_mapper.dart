@@ -43,10 +43,12 @@ class WeatherIconMapper {
     if (iconCode.startsWith('01')) return const Color(0xFFFFA726); // Clear
     if (iconCode.startsWith('02') ||
         iconCode.startsWith('03') ||
-        iconCode.startsWith('04'))
+        iconCode.startsWith('04')) {
       return const Color(0xFF90CAF9); // Clouds
-    if (iconCode.startsWith('09') || iconCode.startsWith('10'))
+    }
+    if (iconCode.startsWith('09') || iconCode.startsWith('10')) {
       return const Color(0xFF4682B4); // Rain
+    }
     if (iconCode.startsWith('11')) return const Color(0xFFFFD700); // Thunder
     if (iconCode.startsWith('13')) return const Color(0xFFE0E0E0); // Snow
     return const Color(0xFF9E9E9E); // Default/Fog

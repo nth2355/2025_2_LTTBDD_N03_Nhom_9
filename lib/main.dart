@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/app_theme.dart';
 import 'core/app_router.dart';
-import 'core/l10n/app_localizations.dart';
+import 'core/lang/app_localizations.dart';
 import 'features/settings/providers/settings_providers.dart';
 import 'features/weather/presentation/providers/weather_providers.dart';
 

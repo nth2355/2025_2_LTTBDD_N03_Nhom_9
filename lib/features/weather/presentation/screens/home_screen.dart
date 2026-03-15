@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/app_theme.dart';
 import '../../../../core/app_router.dart';
 import '../../../../core/constants.dart';
-import '../../../../core/l10n/app_localizations.dart';
+import '../../../../core/lang/app_localizations.dart';
 import '../../../../core/responsive_helper.dart';
 import '../../../../features/settings/providers/settings_providers.dart';
 import '../../../../shared/widgets/glass_container.dart';

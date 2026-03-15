@@ -1,0 +1,5 @@
+Analyzing 2025_2_LTTBDD_N03_Nhom_9...                           
+
+   info - Statements in an if should be enclosed in a block - lib\shared\widgets\weather_icon_mapper.dart:47:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\shared\widgets\weather_icon_mapper.dart:49:7 - curly_braces_in_flow_control_structures
+

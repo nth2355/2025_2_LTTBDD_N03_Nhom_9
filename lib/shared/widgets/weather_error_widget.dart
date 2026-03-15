@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/app_theme.dart';
-import '../../core/l10n/app_localizations.dart';
+import '../../core/lang/app_localizations.dart';
 
 class WeatherErrorWidget extends StatelessWidget {
   final String message;
