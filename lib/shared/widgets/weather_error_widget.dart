@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/app_theme.dart';
 import '../../core/lang/app_localizations.dart';
 
@@ -27,17 +28,22 @@ class WeatherErrorWidget extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.accent.withValues(alpha: 0.1),
+                color: AppColors.accent.withValues(
+                  alpha: 0.1,
+                ),
               ),
-              child: Icon(icon, size: 48, color: AppColors.accent),
+              child: Icon(
+                icon,
+                size: 48,
+                color: AppColors.accent,
+              ),
             ),
             const SizedBox(height: 20),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w500),
             ),
             if (onRetry != null) ...[
               const SizedBox(height: 24),

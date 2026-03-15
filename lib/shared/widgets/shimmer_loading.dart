@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../core/responsive_helper.dart';
 
 class ShimmerLoading extends StatelessWidget {
@@ -16,10 +17,15 @@ class ShimmerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
-      baseColor: isDark ? Colors.grey[800]! : Colors.grey[300]!,
-      highlightColor: isDark ? Colors.grey[700]! : Colors.grey[100]!,
+      baseColor: isDark
+          ? Colors.grey[800]!
+          : Colors.grey[300]!,
+      highlightColor: isDark
+          ? Colors.grey[700]!
+          : Colors.grey[100]!,
       child: Container(
         width: width,
         height: height,
@@ -76,12 +82,19 @@ class WeatherShimmerCards extends StatelessWidget {
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: ResponsiveHelper.statsGridColumns(context),
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: ResponsiveHelper.statsChildAspectRatio(context),
-          ),
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                    ResponsiveHelper.statsGridColumns(
+                      context,
+                    ),
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio:
+                    ResponsiveHelper.statsChildAspectRatio(
+                      context,
+                    ),
+              ),
           itemCount: 6,
           itemBuilder: (context, index) =>
               const ShimmerLoading(height: double.infinity),
