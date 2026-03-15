@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('App builds successfully', (WidgetTester tester) async {
+  testWidgets('App builds successfully', (
+    WidgetTester tester,
+  ) async {
     expect(true, isTrue);
   });
 }

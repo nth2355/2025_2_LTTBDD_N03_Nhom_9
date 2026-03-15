@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../weather/data/local_storage_service.dart';
 import '../../weather/presentation/providers/weather_providers.dart';
 
-// ----- Locale Provider -----
+//  Locale Provider
 
-final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
-  final storage = ref.watch(localStorageServiceProvider);
-  return LocaleNotifier(storage);
-});
+final localeProvider =
+    StateNotifierProvider<LocaleNotifier, Locale>((ref) {
+      final storage = ref.watch(
+        localStorageServiceProvider,
+      );
+      return LocaleNotifier(storage);
+    });
 
 class LocaleNotifier extends StateNotifier<Locale> {
   final LocalStorageService _storage;
 
-  LocaleNotifier(this._storage) : super(Locale(_storage.loadLocale()));
+  LocaleNotifier(this._storage)
+    : super(Locale(_storage.loadLocale()));
 
   void setLocale(Locale locale) {
     state = locale;
@@ -28,19 +33,23 @@ class LocaleNotifier extends StateNotifier<Locale> {
   }
 }
 
-// ----- Theme Mode Provider -----
+// Theme Mode Provider 
 
-final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
-  ref,
-) {
-  final storage = ref.watch(localStorageServiceProvider);
-  return ThemeModeNotifier(storage);
-});
+final themeModeProvider =
+    StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
+      ref,
+    ) {
+      final storage = ref.watch(
+        localStorageServiceProvider,
+      );
+      return ThemeModeNotifier(storage);
+    });
 
 class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   final LocalStorageService _storage;
 
-  ThemeModeNotifier(this._storage) : super(_storage.loadThemeMode());
+  ThemeModeNotifier(this._storage)
+    : super(_storage.loadThemeMode());
 
   void setThemeMode(ThemeMode mode) {
     state = mode;
@@ -48,21 +57,31 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   }
 
   void toggle() {
-    setThemeMode(state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
+    setThemeMode(
+      state == ThemeMode.dark
+          ? ThemeMode.light
+          : ThemeMode.dark,
+    );
   }
 }
 
-// ----- Temperature Unit Provider -----
+//Temperature Unit Provider
 
 enum TemperatureUnit { celsius, fahrenheit }
 
 final temperatureUnitProvider =
-    StateNotifierProvider<TemperatureUnitNotifier, TemperatureUnit>((ref) {
-      final storage = ref.watch(localStorageServiceProvider);
+    StateNotifierProvider<
+      TemperatureUnitNotifier,
+      TemperatureUnit
+    >((ref) {
+      final storage = ref.watch(
+        localStorageServiceProvider,
+      );
       return TemperatureUnitNotifier(storage);
     });
 
-class TemperatureUnitNotifier extends StateNotifier<TemperatureUnit> {
+class TemperatureUnitNotifier
+    extends StateNotifier<TemperatureUnit> {
   final LocalStorageService _storage;
 
   TemperatureUnitNotifier(this._storage)
