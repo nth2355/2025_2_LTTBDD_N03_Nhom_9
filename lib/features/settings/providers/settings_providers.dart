@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../weather/data/local_storage_service.dart';
 import '../../weather/presentation/providers/weather_providers.dart';
 
-// ----- Locale Provider -----
+//  Locale Provider
 
 final localeProvider =
     StateNotifierProvider<LocaleNotifier, Locale>((ref) {
@@ -33,7 +33,7 @@ class LocaleNotifier extends StateNotifier<Locale> {
   }
 }
 
-// ----- Theme Mode Provider -----
+// Theme Mode Provider 
 
 final themeModeProvider =
     StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
@@ -65,7 +65,7 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
   }
 }
 
-// ----- Temperature Unit Provider -----
+//Temperature Unit Provider
 
 enum TemperatureUnit { celsius, fahrenheit }
 
