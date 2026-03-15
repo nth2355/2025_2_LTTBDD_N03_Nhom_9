@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/app_theme.dart';
+
 import '../../../../core/app_router.dart';
+import '../../../../core/app_theme.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/responsive_helper.dart';
+import '../../../../features/settings/providers/settings_providers.dart';
 import '../../data/location_service.dart';
 import '../providers/weather_providers.dart';
-import '../../../../features/settings/providers/settings_providers.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() =>
+      _SplashScreenState();
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen>
@@ -37,17 +39,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
-    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _fadeController,
+            curve: Curves.easeInOut,
+          ),
+        );
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
-    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _scaleController,
+            curve: Curves.elasticOut,
+          ),
+        );
 
-    _slideAnimation = Tween<double>(begin: 30, end: 0).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic),
-    );
+    _slideAnimation = Tween<double>(begin: 30, end: 0)
+        .animate(
+          CurvedAnimation(
+            parent: _fadeController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     // Start animations
     _fadeController.forward();
@@ -64,18 +78,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     if (savedCities.isNotEmpty) {
       // Returning user: load weather for selected city
-      final selectedIndex = ref.read(selectedCityIndexProvider);
-      final cityIndex = selectedIndex < savedCities.length ? selectedIndex : 0;
+      final selectedIndex = ref.read(
+        selectedCityIndexProvider,
+      );
+      final cityIndex = selectedIndex < savedCities.length
+          ? selectedIndex
+          : 0;
       final city = savedCities[cityIndex];
       ref
           .read(weatherNotifierProvider.notifier)
-          .fetchWeather(city.location.lat, city.location.lon, lang: lang);
+          .fetchWeather(
+            city.location.lat,
+            city.location.lon,
+            lang: lang,
+          );
     } else {
       // First launch: try to get current GPS location
       double lat = ApiConstants.defaultLat;
       double lon = ApiConstants.defaultLon;
 
-      final position = await LocationService.getCurrentPosition();
+      final position =
+          await LocationService.getCurrentPosition();
       if (position != null) {
         lat = position.latitude;
         lon = position.longitude;
@@ -87,18 +110,28 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           .fetchWeather(lat, lon, lang: lang);
 
       // Wait for weather to load, then add to saved cities
-      await Future.delayed(const Duration(milliseconds: 2000));
-      final weatherState = ref.read(weatherNotifierProvider);
+      await Future.delayed(
+        const Duration(milliseconds: 2000),
+      );
+      final weatherState = ref.read(
+        weatherNotifierProvider,
+      );
       if (weatherState.weather != null) {
-        ref.read(savedCitiesProvider.notifier).addCity(weatherState.weather!);
+        ref
+            .read(savedCitiesProvider.notifier)
+            .addCity(weatherState.weather!);
       }
     }
 
     // Wait for animation + minimum splash time
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(
+      const Duration(milliseconds: 2500),
+    );
 
     if (mounted) {
-      Navigator.of(context).pushReplacementNamed(AppRouter.home);
+      Navigator.of(
+        context,
+      ).pushReplacementNamed(AppRouter.home);
     }
   }
 
@@ -151,9 +184,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: Colors.white.withValues(
+                      alpha: 0.1,
+                    ),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: Colors.white.withValues(
+                        alpha: 0.2,
+                      ),
                       width: 2,
                     ),
                   ),
@@ -181,7 +218,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: Colors.white.withValues(
+                      alpha: 0.7,
+                    ),
                     letterSpacing: 4,
                   ),
                 ),
@@ -192,9 +231,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   height: 32,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.white.withValues(alpha: 0.6),
-                    ),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(
+                          Colors.white.withValues(
+                            alpha: 0.6,
+                          ),
+                        ),
                   ),
                 ),
               ],
