@@ -40,22 +40,27 @@ class WeatherIconMapper {
 
   /// Get icon color for fallback material icon
   static Color getIconColor(String iconCode) {
-    if (iconCode.startsWith('01')) return const Color(0xFFFFA726); // Clear
+    if (iconCode.startsWith('01'))
+      return const Color(0xFFFFA726); // Clear
     if (iconCode.startsWith('02') ||
         iconCode.startsWith('03') ||
-        iconCode.startsWith('04')) {
+        iconCode.startsWith('04'))
       return const Color(0xFF90CAF9); // Clouds
-    }
-    if (iconCode.startsWith('09') || iconCode.startsWith('10')) {
+    if (iconCode.startsWith('09') ||
+        iconCode.startsWith('10'))
       return const Color(0xFF4682B4); // Rain
-    }
-    if (iconCode.startsWith('11')) return const Color(0xFFFFD700); // Thunder
-    if (iconCode.startsWith('13')) return const Color(0xFFE0E0E0); // Snow
+    if (iconCode.startsWith('11'))
+      return const Color(0xFFFFD700); // Thunder
+    if (iconCode.startsWith('13'))
+      return const Color(0xFFE0E0E0); // Snow
     return const Color(0xFF9E9E9E); // Default/Fog
   }
 
   /// Get a large weather icon widget with floating animation using PNG assets
-  static Widget getLargeIcon(String iconCode, {double size = 80}) {
+  static Widget getLargeIcon(
+    String iconCode, {
+    double size = 80,
+  }) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
       duration: const Duration(milliseconds: 1500),
@@ -70,13 +75,14 @@ class WeatherIconMapper {
               width: size,
               height: size,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => Icon(
-                iconCode.endsWith('n')
-                    ? Icons.nightlight_round
-                    : Icons.wb_sunny_rounded,
-                size: size,
-                color: getIconColor(iconCode),
-              ),
+              errorBuilder: (context, error, stackTrace) =>
+                  Icon(
+                    iconCode.endsWith('n')
+                        ? Icons.nightlight_round
+                        : Icons.wb_sunny_rounded,
+                    size: size,
+                    color: getIconColor(iconCode),
+                  ),
             ),
           ),
         );
@@ -85,7 +91,10 @@ class WeatherIconMapper {
   }
 
   /// Get a small weather icon widget (for list items, etc.)
-  static Widget getSmallIcon(String iconCode, {double size = 40}) {
+  static Widget getSmallIcon(
+    String iconCode, {
+    double size = 40,
+  }) {
     return Image.asset(
       getIconAsset(iconCode),
       width: size,
