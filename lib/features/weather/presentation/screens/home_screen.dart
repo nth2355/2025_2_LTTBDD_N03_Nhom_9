@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/app_theme.dart';
+
 import '../../../../core/app_router.dart';
+import '../../../../core/app_theme.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/lang/app_localizations.dart';
 import '../../../../core/responsive_helper.dart';
@@ -11,14 +12,15 @@ import '../../../../shared/widgets/glass_container.dart';
 import '../../../../shared/widgets/shimmer_loading.dart';
 import '../../../../shared/widgets/weather_error_widget.dart';
 import '../../../../shared/widgets/weather_icon_mapper.dart';
-import '../providers/weather_providers.dart';
 import '../../data/weather_models.dart';
+import '../providers/weather_providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() =>
+      _HomeScreenState();
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
@@ -53,10 +55,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   Future<void> _onRefresh() async {
     final savedCities = ref.read(savedCitiesProvider);
-    final selectedIndex = ref.read(selectedCityIndexProvider);
+    final selectedIndex = ref.read(
+      selectedCityIndexProvider,
+    );
     final locale = ref.read(localeProvider);
 
-    if (savedCities.isNotEmpty && selectedIndex < savedCities.length) {
+    if (savedCities.isNotEmpty &&
+        selectedIndex < savedCities.length) {
       final city = savedCities[selectedIndex];
       await ref
           .read(weatherNotifierProvider.notifier)
@@ -84,7 +89,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final locale = ref.watch(localeProvider);
     final tempUnit = ref.watch(temperatureUnitProvider);
     final l10n = AppLocalizations.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
@@ -97,13 +103,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             colors: isDark
                 ? [
                     AppColors.primaryDark,
-                    AppColors.primaryDark.withValues(alpha: 0.8),
-                    const Color(0xFF040924), // Even darker for bottom
+                    AppColors.primaryDark.withValues(
+                      alpha: 0.8,
+                    ),
+                    const Color(
+                      0xFF040924,
+                    ), // Even darker for bottom
                   ]
                 : [
                     const Color(0xFF1E88E5), // Blue top
-                    const Color(0xFF42A5F5), // Lighter middle
-                    const Color(0xFF64B5F6), // Soft sky blue bottom
+                    const Color(
+                      0xFF42A5F5,
+                    ), // Lighter middle
+                    const Color(
+                      0xFF64B5F6,
+                    ), // Soft sky blue bottom
                   ],
           ),
         ),
@@ -111,7 +125,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           child: Column(
             children: [
               // Header
-              _buildHeader(context, weatherState, l10n, locale),
+              _buildHeader(
+                context,
+                weatherState,
+                l10n,
+                locale,
+              ),
               // Content
               Expanded(
                 child: _buildContent(
@@ -136,9 +155,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     AppLocalizations l10n,
     Locale locale,
   ) {
-    final cityName = weatherState.weather?.location.name ?? '---';
+    final cityName =
+        weatherState.weather?.location.name ?? '---';
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 12,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -160,7 +183,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               final newLocale = locale.languageCode == 'en'
                   ? const Locale('vi')
                   : const Locale('en');
-              ref.read(localeProvider.notifier).setLocale(newLocale);
+              ref
+                  .read(localeProvider.notifier)
+                  .setLocale(newLocale);
               // Re-fetch weather with new language
               if (weatherState.weather != null) {
                 ref
@@ -174,11 +199,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               }
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: Colors.white.withValues(
+                    alpha: 0.3,
+                  ),
+                ),
               ),
               child: Text(
                 locale.languageCode.toUpperCase(),
@@ -193,8 +225,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           const SizedBox(width: 12),
           // Search icon
           IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(AppRouter.search),
-            icon: const Icon(Icons.search_rounded, color: Colors.white),
+            onPressed: () => Navigator.of(
+              context,
+            ).pushNamed(AppRouter.search),
+            icon: const Icon(
+              Icons.search_rounded,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -208,16 +245,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     TemperatureUnit tempUnit,
     bool isDark,
   ) {
-    final hPadding = ResponsiveHelper.horizontalPadding(context);
+    final hPadding = ResponsiveHelper.horizontalPadding(
+      context,
+    );
     final isWide = !ResponsiveHelper.isMobile(context);
 
     if (weatherState.status == WeatherStatus.loading &&
         weatherState.weather == null) {
       return ResponsiveCenter(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: hPadding),
+          padding: EdgeInsets.symmetric(
+            horizontal: hPadding,
+          ),
           child: Column(
-            children: const [WeatherShimmerHero(), WeatherShimmerCards()],
+            children: const [
+              WeatherShimmerHero(),
+              WeatherShimmerCards(),
+            ],
           ),
         ),
       );
@@ -233,17 +277,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     final weather = weatherState.weather;
     if (weather == null) {
-      return WeatherErrorWidget(message: l10n.apiError, onRetry: _onRefresh);
+      return WeatherErrorWidget(
+        message: l10n.apiError,
+        onRetry: _onRefresh,
+      );
     }
 
     return RefreshIndicator(
       onRefresh: _onRefresh,
       color: AppColors.accent,
-      backgroundColor: isDark ? AppColors.cardDark : Colors.white,
+      backgroundColor: isDark
+          ? AppColors.cardDark
+          : Colors.white,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: ResponsiveCenter(
-          padding: EdgeInsets.symmetric(horizontal: hPadding),
+          padding: EdgeInsets.symmetric(
+            horizontal: hPadding,
+          ),
           child: Column(
             children: [
               // Hero Section
@@ -252,7 +303,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               // On tablet/desktop: hourly & daily side by side
               if (isWide) ...[
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: _buildHourlyForecast(
@@ -275,13 +327,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ),
               ] else ...[
                 // Mobile: stacked
-                _buildHourlyForecast(weather, tempUnit, l10n, isDark),
+                _buildHourlyForecast(
+                  weather,
+                  tempUnit,
+                  l10n,
+                  isDark,
+                ),
                 const SizedBox(height: 20),
-                _buildDailyForecast(weather, tempUnit, l10n, isDark),
+                _buildDailyForecast(
+                  weather,
+                  tempUnit,
+                  l10n,
+                  isDark,
+                ),
               ],
               const SizedBox(height: 20),
               // Weather Stats Grid
-              _buildStatsGrid(weather, l10n, isDark, context),
+              _buildStatsGrid(
+                weather,
+                l10n,
+                isDark,
+                context,
+              ),
               const SizedBox(height: 30),
             ],
           ),
@@ -297,7 +364,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   ) {
     final current = weather.current;
     final isCelsius = tempUnit == TemperatureUnit.celsius;
-    final temp = isCelsius ? current.tempCelsius : current.tempFahrenheit;
+    final temp = isCelsius
+        ? current.tempCelsius
+        : current.tempFahrenheit;
 
     // Use today's daily forecast for accurate high/low, fallback to current
     final hasDaily = weather.dailyForecast.isNotEmpty;
@@ -306,14 +375,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ? weather.dailyForecast.first.tempMaxCelsius
               : current.tempMaxCelsius)
         : (hasDaily
-              ? weather.dailyForecast.first.tempMaxFahrenheit
+              ? weather
+                    .dailyForecast
+                    .first
+                    .tempMaxFahrenheit
               : current.tempMaxFahrenheit);
     final low = isCelsius
         ? (hasDaily
               ? weather.dailyForecast.first.tempMinCelsius
               : current.tempMinCelsius)
         : (hasDaily
-              ? weather.dailyForecast.first.tempMinFahrenheit
+              ? weather
+                    .dailyForecast
+                    .first
+                    .tempMinFahrenheit
               : current.tempMinFahrenheit);
 
     final unit = isCelsius ? '°C' : '°F';
@@ -321,8 +396,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     return FadeTransition(
       opacity: _heroController,
       child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero)
-            .animate(
+        position:
+            Tween<Offset>(
+              begin: const Offset(0, 0.2),
+              end: Offset.zero,
+            ).animate(
               CurvedAnimation(
                 parent: _heroController,
                 curve: Curves.easeOutCubic,
@@ -332,7 +410,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           children: [
             const SizedBox(height: 20),
             // Weather Icon
-            WeatherIconMapper.getLargeIcon(current.icon, size: 72),
+            WeatherIconMapper.getLargeIcon(
+              current.icon,
+              size: 72,
+            ),
             const SizedBox(height: 12),
             // Temperature
             Text(
@@ -366,7 +447,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   '${l10n.high}: ${high.round()}$unit',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: Colors.white.withValues(
+                      alpha: 0.7,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -374,7 +457,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   '${l10n.low}: ${low.round()}$unit',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: Colors.white.withValues(
+                      alpha: 0.7,
+                    ),
                   ),
                 ),
               ],
@@ -400,7 +485,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           children: [
             Row(
               children: [
-                Icon(Icons.schedule_rounded, size: 18, color: Colors.white70),
+                Icon(
+                  Icons.schedule_rounded,
+                  size: 18,
+                  color: Colors.white70,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   l10n.hourlyForecast,
@@ -418,28 +507,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: weather.hourlyForecast.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(width: 16),
                 itemBuilder: (context, index) {
-                  final hourly = weather.hourlyForecast[index];
-                  final isCelsius = tempUnit == TemperatureUnit.celsius;
+                  final hourly =
+                      weather.hourlyForecast[index];
+                  final isCelsius =
+                      tempUnit == TemperatureUnit.celsius;
                   final temp = isCelsius
                       ? hourly.tempCelsius
                       : hourly.tempFahrenheit;
                   final timeStr = index == 0
                       ? l10n.now
-                      : DateFormat.Hm().format(hourly.dateTime);
+                      : DateFormat.Hm().format(
+                          hourly.dateTime,
+                        );
 
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         timeStr,
                         style: TextStyle(
                           fontSize: 12,
-                          color: isDark ? Colors.white60 : Colors.white70,
+                          color: isDark
+                              ? Colors.white60
+                              : Colors.white70,
                         ),
                       ),
-                      WeatherIconMapper.getSmallIcon(hourly.icon, size: 28),
+                      WeatherIconMapper.getSmallIcon(
+                        hourly.icon,
+                        size: 28,
+                      ),
                       Text(
                         '${temp.round()}°',
                         style: TextStyle(
@@ -502,14 +602,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 l10n.translate('weatherTip1'),
                 style: TextStyle(
                   fontSize: 12,
-                  color: isDark ? Colors.white60 : Colors.white70,
+                  color: isDark
+                      ? Colors.white60
+                      : Colors.white70,
                 ),
               ),
             ),
             const SizedBox(height: 12),
-            ...weather.dailyForecast.asMap().entries.map((entry) {
+            ...weather.dailyForecast.asMap().entries.map((
+              entry,
+            ) {
               final daily = entry.value;
-              final isCelsius = tempUnit == TemperatureUnit.celsius;
+              final isCelsius =
+                  tempUnit == TemperatureUnit.celsius;
               final high = isCelsius
                   ? daily.tempMaxCelsius
                   : daily.tempMaxFahrenheit;
@@ -521,7 +626,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ).format(daily.date);
 
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6,
+                ),
                 child: Row(
                   children: [
                     SizedBox(
@@ -536,14 +643,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       ),
                     ),
                     const SizedBox(width: 12),
-                    WeatherIconMapper.getSmallIcon(daily.icon, size: 22),
-                    if (daily.pop != null && daily.pop! > 0.1) ...[
+                    WeatherIconMapper.getSmallIcon(
+                      daily.icon,
+                      size: 22,
+                    ),
+                    if (daily.pop != null &&
+                        daily.pop! > 0.1) ...[
                       const SizedBox(width: 4),
                       Text(
                         '${(daily.pop! * 100).round()}%',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.lightBlueAccent.withValues(alpha: 0.8),
+                          color: Colors.lightBlueAccent
+                              .withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -552,7 +664,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       '${low.round()}°',
                       style: TextStyle(
                         fontSize: 14,
-                        color: isDark ? Colors.white54 : Colors.white60,
+                        color: isDark
+                            ? Colors.white54
+                            : Colors.white60,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -561,9 +675,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       width: 80,
                       height: 4,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(
+                          2,
+                        ),
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF64B5F6), AppColors.accent],
+                          colors: [
+                            Color(0xFF64B5F6),
+                            AppColors.accent,
+                          ],
                         ),
                       ),
                     ),
@@ -600,8 +719,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       current.sunset * 1000,
     );
 
-    final gridColumns = ResponsiveHelper.statsGridColumns(context);
-    final aspectRatio = ResponsiveHelper.statsChildAspectRatio(context);
+    final gridColumns = ResponsiveHelper.statsGridColumns(
+      context,
+    );
+    final aspectRatio =
+        ResponsiveHelper.statsChildAspectRatio(context);
 
     final stats = [
       _StatItem(
@@ -643,12 +765,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: gridColumns,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: aspectRatio,
-        ),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: gridColumns,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: aspectRatio,
+            ),
         itemCount: stats.length,
         itemBuilder: (context, index) {
           final stat = stats[index];
@@ -656,14 +779,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     Icon(
                       stat.icon,
                       size: 16,
-                      color: isDark ? Colors.white54 : Colors.white60,
+                      color: isDark
+                          ? Colors.white54
+                          : Colors.white60,
                     ),
                     const SizedBox(width: 6),
                     Flexible(
@@ -671,7 +797,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         stat.label,
                         style: TextStyle(
                           fontSize: 12,
-                          color: isDark ? Colors.white54 : Colors.white60,
+                          color: isDark
+                              ? Colors.white54
+                              : Colors.white60,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -698,7 +826,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           fontWeight: FontWeight.w500,
                           color: isDark
                               ? Colors.white70
-                              : Colors.white.withValues(alpha: 0.85),
+                              : Colors.white.withValues(
+                                  alpha: 0.85,
+                                ),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -713,7 +843,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
-  Widget _buildStaggeredCard({required int index, required Widget child}) {
+  Widget _buildStaggeredCard({
+    required int index,
+    required Widget child,
+  }) {
     final delay = index * 0.15;
     return FadeTransition(
       opacity: CurvedAnimation(
@@ -725,8 +858,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ),
       ),
       child: SlideTransition(
-        position: Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero)
-            .animate(
+        position:
+            Tween<Offset>(
+              begin: const Offset(0, 0.1),
+              end: Offset.zero,
+            ).animate(
               CurvedAnimation(
                 parent: _cardsController,
                 curve: Interval(
@@ -741,8 +877,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
-  Widget _buildBottomNav(BuildContext context, AppLocalizations l10n) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget _buildBottomNav(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
         color: isDark
@@ -758,9 +898,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 8,
+          ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment:
+                MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(
                 icon: Icons.wb_sunny_rounded,
@@ -774,7 +918,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 label: l10n.locations,
                 isSelected: false,
                 isDark: isDark,
-                onTap: () => Navigator.of(context).pushNamed(AppRouter.cities),
+                onTap: () => Navigator.of(
+                  context,
+                ).pushNamed(AppRouter.cities),
               ),
               _buildNavItem(
                 icon: Icons.settings_rounded,
@@ -801,7 +947,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }) {
     final color = isSelected
         ? AppColors.accent
-        : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight);
+        : (isDark
+              ? AppColors.textSecondaryDark
+              : AppColors.textSecondaryLight);
 
     return GestureDetector(
       onTap: onTap,
@@ -815,7 +963,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             style: TextStyle(
               fontSize: 11,
               color: color,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              fontWeight: isSelected
+                  ? FontWeight.w600
+                  : FontWeight.w400,
             ),
           ),
         ],
@@ -824,19 +974,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   void _showSettingsSheet(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
-      backgroundColor: isDark ? AppColors.cardDark : Colors.white,
+      backgroundColor: isDark
+          ? AppColors.cardDark
+          : Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(24),
+        ),
       ),
       builder: (context) => Consumer(
         builder: (context, ref, _) {
           final l10n = AppLocalizations.of(context);
           final locale = ref.watch(localeProvider);
           final themeMode = ref.watch(themeModeProvider);
-          final tempUnit = ref.watch(temperatureUnitProvider);
+          final tempUnit = ref.watch(
+            temperatureUnitProvider,
+          );
 
           return Padding(
             padding: const EdgeInsets.all(24),
@@ -850,7 +1007,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     height: 4,
                     decoration: BoxDecoration(
                       color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(
+                        2,
+                      ),
                     ),
                   ),
                 ),
@@ -865,56 +1024,84 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 const SizedBox(height: 20),
                 // Language
                 ListTile(
-                  leading: const Icon(Icons.language_rounded),
+                  leading: const Icon(
+                    Icons.language_rounded,
+                  ),
                   title: Text(l10n.language),
                   trailing: SegmentedButton<String>(
                     segments: const [
-                      ButtonSegment(value: 'en', label: Text('EN')),
-                      ButtonSegment(value: 'vi', label: Text('VI')),
+                      ButtonSegment(
+                        value: 'en',
+                        label: Text('EN'),
+                      ),
+                      ButtonSegment(
+                        value: 'vi',
+                        label: Text('VI'),
+                      ),
                     ],
                     selected: {locale.languageCode},
                     onSelectionChanged: (selected) {
                       ref
                           .read(localeProvider.notifier)
-                          .setLocale(Locale(selected.first));
+                          .setLocale(
+                            Locale(selected.first),
+                          );
                     },
-                    style: ButtonStyle(visualDensity: VisualDensity.compact),
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                    ),
                   ),
                 ),
                 // Temperature Unit
                 ListTile(
-                  leading: const Icon(Icons.thermostat_rounded),
-                  title: Text(l10n.temperatureUnit),
-                  trailing: SegmentedButton<TemperatureUnit>(
-                    segments: const [
-                      ButtonSegment(
-                        value: TemperatureUnit.celsius,
-                        label: Text('°C'),
-                      ),
-                      ButtonSegment(
-                        value: TemperatureUnit.fahrenheit,
-                        label: Text('°F'),
-                      ),
-                    ],
-                    selected: {tempUnit},
-                    onSelectionChanged: (selected) {
-                      ref
-                          .read(temperatureUnitProvider.notifier)
-                          .setUnit(selected.first);
-                    },
-                    style: ButtonStyle(visualDensity: VisualDensity.compact),
+                  leading: const Icon(
+                    Icons.thermostat_rounded,
                   ),
+                  title: Text(l10n.temperatureUnit),
+                  trailing:
+                      SegmentedButton<TemperatureUnit>(
+                        segments: const [
+                          ButtonSegment(
+                            value: TemperatureUnit.celsius,
+                            label: Text('°C'),
+                          ),
+                          ButtonSegment(
+                            value:
+                                TemperatureUnit.fahrenheit,
+                            label: Text('°F'),
+                          ),
+                        ],
+                        selected: {tempUnit},
+                        onSelectionChanged: (selected) {
+                          ref
+                              .read(
+                                temperatureUnitProvider
+                                    .notifier,
+                              )
+                              .setUnit(selected.first);
+                        },
+                        style: ButtonStyle(
+                          visualDensity:
+                              VisualDensity.compact,
+                        ),
+                      ),
                 ),
                 // Dark Mode
                 SwitchListTile(
-                  secondary: const Icon(Icons.dark_mode_rounded),
+                  secondary: const Icon(
+                    Icons.dark_mode_rounded,
+                  ),
                   title: Text(l10n.darkMode),
                   value: themeMode == ThemeMode.dark,
                   activeTrackColor: AppColors.accent,
                   onChanged: (value) {
                     ref
                         .read(themeModeProvider.notifier)
-                        .setThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+                        .setThemeMode(
+                          value
+                              ? ThemeMode.dark
+                              : ThemeMode.light,
+                        );
                   },
                 ),
                 const SizedBox(height: 16),
@@ -988,5 +1175,11 @@ class _StatItem {
   final Color? valueColor;
   final String? advice;
 
-  _StatItem(this.label, this.value, this.icon, {this.valueColor, this.advice});
+  _StatItem(
+    this.label,
+    this.value,
+    this.icon, {
+    this.valueColor,
+    this.advice,
+  });
 }
