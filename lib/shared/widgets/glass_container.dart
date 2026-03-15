@@ -1,7 +1,5 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
 import '../../core/app_theme.dart';
 
 class GlassContainer extends StatelessWidget {
@@ -30,15 +28,12 @@ class GlassContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark =
-        Theme.of(context).brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor =
         backgroundColor ??
         (isDark
             ? Colors.white.withValues(alpha: opacity)
-            : Colors.white.withValues(
-                alpha: opacity + 0.3,
-              ));
+            : Colors.white.withValues(alpha: opacity + 0.3));
 
     return Container(
       width: width,
@@ -47,17 +42,12 @@ class GlassContainer extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: blurAmount,
-            sigmaY: blurAmount,
-          ),
+          filter: ImageFilter.blur(sigmaX: blurAmount, sigmaY: blurAmount),
           child: Container(
             padding: padding ?? const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: bgColor,
-              borderRadius: BorderRadius.circular(
-                borderRadius,
-              ),
+              borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
                 color: isDark
                     ? AppColors.glassBorder
@@ -66,9 +56,7 @@ class GlassContainer extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(
-                    alpha: 0.05,
-                  ),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
