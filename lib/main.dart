@@ -1,46 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import '../core/constants.dart';
-import '../features/weather/data/weather_api_service.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'core/app_theme.dart';
+import 'core/app_router.dart';
+import 'core/lang/app_localizations.dart';
+import 'features/settings/providers/settings_providers.dart';
+import 'features/weather/presentation/providers/weather_providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
 
-  await dotenv.load(fileName: ".env");
+  // Initialize SharedPreferences before app starts
+  final prefs = await SharedPreferences.getInstance();
 
-  // Khởi tạo Service
-  final weatherService = WeatherApiService();
-
-  print('BẮT ĐẦU TEST API ');
-
-  try {
-    final data = await weatherService.getWeather(
-      ApiConstants.defaultLat,
-      ApiConstants.defaultLon,
-    );
-
-    print('Kết quả thành công:');
-    print('Thành phố: ${data.location.name}');
-    print('Nhiệt độ: ${data.current.temp}°C');
-  } catch (e) {
-    print('Lỗi khi call API: $e');
-  }
-
-  print(' KẾT THÚC TEST');
-
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      child: const WeatherApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WeatherApp extends ConsumerWidget {
+  const WeatherApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    final themeMode = ref.watch(themeModeProvider);
+
     return MaterialApp(
-      home: Scaffold(
-        body: Center(child: Text('Weather App Test')),
-      ),
+      title: 'Weather',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: themeMode,
+      locale: locale,
+      supportedLocales: const [Locale('en'), Locale('vi')],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: AppRouter.splash,
     );
   }
 }
