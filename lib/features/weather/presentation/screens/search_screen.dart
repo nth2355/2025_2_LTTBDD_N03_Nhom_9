@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/app_theme.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/lang/app_localizations.dart';
@@ -14,13 +15,17 @@ class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  ConsumerState<SearchScreen> createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() =>
+      _SearchScreenState();
 }
 
-class _SearchScreenState extends ConsumerState<SearchScreen> {
+class _SearchScreenState
+    extends ConsumerState<SearchScreen> {
   final _searchController = TextEditingController();
   final _focusNode = FocusNode();
-  final _debouncer = Debouncer(milliseconds: ApiConstants.debounceDurationMs);
+  final _debouncer = Debouncer(
+    milliseconds: ApiConstants.debounceDurationMs,
+  );
   bool _isLoadingWeather = false;
 
   @override
@@ -43,19 +48,25 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void _onSearchChanged(String query) {
     _debouncer.run(() {
       if (query.length >= ApiConstants.minSearchLength) {
-        ref.read(searchNotifierProvider.notifier).search(query);
+        ref
+            .read(searchNotifierProvider.notifier)
+            .search(query);
       } else {
         ref.read(searchNotifierProvider.notifier).clear();
       }
     });
   }
 
-  Future<void> _onCitySelected(CitySearchResult city) async {
+  Future<void> _onCitySelected(
+    CitySearchResult city,
+  ) async {
     setState(() => _isLoadingWeather = true);
 
     try {
       final locale = ref.read(localeProvider);
-      final repository = ref.read(weatherRepositoryProvider);
+      final repository = ref.read(
+        weatherRepositoryProvider,
+      );
       final weather = await repository.getWeather(
         city.lat,
         city.lon,
@@ -63,20 +74,29 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       );
 
       // Add to saved cities
-      ref.read(savedCitiesProvider.notifier).addCity(weather);
+      ref
+          .read(savedCitiesProvider.notifier)
+          .addCity(weather);
 
       // Update current weather display
       ref
           .read(weatherNotifierProvider.notifier)
-          .fetchWeather(city.lat, city.lon, lang: locale.languageCode);
+          .fetchWeather(
+            city.lat,
+            city.lon,
+            lang: locale.languageCode,
+          );
 
       // Find the index of the newly added city
       final savedCities = ref.read(savedCitiesProvider);
       final index = savedCities.indexWhere(
-        (w) => w.location.cacheKey == weather.location.cacheKey,
+        (w) =>
+            w.location.cacheKey ==
+            weather.location.cacheKey,
       );
       if (index >= 0) {
-        ref.read(selectedCityIndexProvider.notifier).state = index;
+        ref.read(selectedCityIndexProvider.notifier).state =
+            index;
       }
 
       if (mounted) {
@@ -104,10 +124,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget build(BuildContext context) {
     final searchState = ref.watch(searchNotifierProvider);
     final l10n = AppLocalizations.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark =
+        Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+      backgroundColor: isDark
+          ? AppColors.surfaceDark
+          : AppColors.surfaceLight,
       body: SafeArea(
         child: ResponsiveCenter(
           child: Column(
@@ -115,7 +138,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               // Search Header
               _buildSearchHeader(context, l10n, isDark),
               // Results
-              Expanded(child: _buildResults(searchState, l10n, isDark)),
+              Expanded(
+                child: _buildResults(
+                  searchState,
+                  l10n,
+                  isDark,
+                ),
+              ),
             ],
           ),
         ),
@@ -146,12 +175,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: isDark ? Colors.white : AppColors.textPrimaryLight,
+              color: isDark
+                  ? Colors.white
+                  : AppColors.textPrimaryLight,
             ),
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
               decoration: BoxDecoration(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.08)
@@ -163,7 +196,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 focusNode: _focusNode,
                 onChanged: _onSearchChanged,
                 style: TextStyle(
-                  color: isDark ? Colors.white : AppColors.textPrimaryLight,
+                  color: isDark
+                      ? Colors.white
+                      : AppColors.textPrimaryLight,
                 ),
                 decoration: InputDecoration(
                   hintText: l10n.searchHint,
@@ -175,18 +210,28 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   border: InputBorder.none,
                   icon: Icon(
                     Icons.search_rounded,
-                    color: isDark ? Colors.white38 : Colors.grey,
+                    color: isDark
+                        ? Colors.white38
+                        : Colors.grey,
                   ),
-                  suffixIcon: _searchController.text.isNotEmpty
+                  suffixIcon:
+                      _searchController.text.isNotEmpty
                       ? IconButton(
                           onPressed: () {
                             _searchController.clear();
-                            ref.read(searchNotifierProvider.notifier).clear();
+                            ref
+                                .read(
+                                  searchNotifierProvider
+                                      .notifier,
+                                )
+                                .clear();
                           },
                           icon: Icon(
                             Icons.close_rounded,
                             size: 20,
-                            color: isDark ? Colors.white54 : Colors.grey,
+                            color: isDark
+                                ? Colors.white54
+                                : Colors.grey,
                           ),
                         )
                       : null,
@@ -210,12 +255,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: AppColors.accent),
+            CircularProgressIndicator(
+              color: AppColors.accent,
+            ),
             const SizedBox(height: 16),
             Text(
               l10n.loading,
               style: TextStyle(
-                color: isDark ? Colors.white54 : AppColors.textSecondaryLight,
+                color: isDark
+                    ? Colors.white54
+                    : AppColors.textSecondaryLight,
               ),
             ),
           ],
@@ -232,14 +281,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               Icon(
                 Icons.search_rounded,
                 size: 64,
-                color: isDark ? Colors.white12 : Colors.grey[300],
+                color: isDark
+                    ? Colors.white12
+                    : Colors.grey[300],
               ),
               const SizedBox(height: 16),
               Text(
                 l10n.searchCity,
                 style: TextStyle(
                   fontSize: 16,
-                  color: isDark ? Colors.white38 : AppColors.textSecondaryLight,
+                  color: isDark
+                      ? Colors.white38
+                      : AppColors.textSecondaryLight,
                 ),
               ),
             ],
@@ -248,7 +301,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
       case SearchStatus.loading:
         return const Center(
-          child: CircularProgressIndicator(color: AppColors.accent),
+          child: CircularProgressIndicator(
+            color: AppColors.accent,
+          ),
         );
 
       case SearchStatus.loaded:
@@ -261,7 +316,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           separatorBuilder: (context, index) => Divider(
             height: 1,
             indent: 60,
-            color: isDark ? Colors.white10 : Colors.grey[200],
+            color: isDark
+                ? Colors.white10
+                : Colors.grey[200],
           ),
           itemBuilder: (context, index) {
             final city = searchState.results[index];
@@ -270,7 +327,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.1),
+                  color: AppColors.accent.withValues(
+                    alpha: 0.1,
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -283,20 +342,26 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 city.name,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white : AppColors.textPrimaryLight,
+                  color: isDark
+                      ? Colors.white
+                      : AppColors.textPrimaryLight,
                 ),
               ),
               subtitle: Text(
                 '${city.state != null ? '${city.state}, ' : ''}${city.country}',
                 style: TextStyle(
                   fontSize: 13,
-                  color: isDark ? Colors.white54 : AppColors.textSecondaryLight,
+                  color: isDark
+                      ? Colors.white54
+                      : AppColors.textSecondaryLight,
                 ),
               ),
               trailing: Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 16,
-                color: isDark ? Colors.white24 : Colors.grey[400],
+                color: isDark
+                    ? Colors.white24
+                    : Colors.grey[400],
               ),
               onTap: () => _onCitySelected(city),
             );
@@ -305,7 +370,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
       case SearchStatus.error:
         return WeatherErrorWidget(
-          message: searchState.errorMessage ?? l10n.apiError,
+          message:
+              searchState.errorMessage ?? l10n.apiError,
           onRetry: () {
             if (_searchController.text.isNotEmpty) {
               ref
