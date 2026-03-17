@@ -9,12 +9,12 @@ class WeatherIconMapper {
       case '01n':
         return 'assets/images/moon_3614882.png'; // Clear sky (night)
       case '02d':
-        return 'assets/images/cloud_15114062.png'; // Few clouds (day)
+        return 'assets/images/fewcloud_15114062.png'; // Few clouds (day)
       case '02n':
         return 'assets/images/cloudy-night_5454103.png'; // Few clouds (night)
       case '03d':
       case '03n':
-        return 'assets/images/fewcloud_18176588.png'; // Scattered clouds
+        return 'assets/images/manyclouds_18176588.png'; // Scattered clouds
       case '04d':
       case '04n':
         return 'assets/images/overcast_5421263.png'; // Broken/Overcast clouds
