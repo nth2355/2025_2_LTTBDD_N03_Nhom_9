@@ -931,6 +931,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   _showSettingsSheet(context);
                 },
               ),
+              _buildNavItem(
+                icon: Icons.info_outline_rounded,
+                label: l10n.about,
+                isSelected: false,
+                isDark: isDark,
+                onTap: () => Navigator.of(context).pushNamed(AppRouter.about),
+              ),
             ],
           ),
         ),

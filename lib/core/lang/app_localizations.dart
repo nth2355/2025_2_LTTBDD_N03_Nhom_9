@@ -92,6 +92,12 @@ class AppLocalizations {
       'home': 'Home',
       'locations': 'Locations',
       'weather': 'Weather',
+      'member1': 'Member 1',
+      'member2': 'Member 2',
+      'studentName': 'Name',
+      'studentId': 'Student ID',
+      'major': 'Major',
+      'classInfo': 'Class',
       // New keys for localization fixes
       'cancel': 'Cancel',
       'confirmRemoveCity':
@@ -178,7 +184,12 @@ class AppLocalizations {
       'home': 'Trang chủ',
       'locations': 'Địa điểm',
       'weather': 'Thời tiết',
-      // New keys for localization fixes
+      'member1': 'Thành viên 1',
+      'member2': 'Thành viên 2',
+      'studentName': 'Họ tên',
+      'studentId': 'Mã sinh viên',
+      'major': 'Ngành học',
+      'classInfo': 'Lớp',
       'cancel': 'Hủy',
       'confirmRemoveCity':
           'Xóa {city} khỏi danh sách đã lưu?',
@@ -213,6 +224,14 @@ class AppLocalizations {
   }
 
   // Convenience getters
+  String get aboutApp => translate('aboutApp');
+  String get member1 => translate('member1');
+  String get member2 => translate('member2');
+  String get studentName => translate('studentName');
+  String get studentId => translate('studentId');
+  String get major => translate('major');
+  String get classInfo => translate('classInfo');
+  String get about => translate('about');
   String get appName => translate('appName');
   String get subtitle => translate('subtitle');
   String get search => translate('search');
